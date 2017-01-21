@@ -5,10 +5,11 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
 	public static GameManager Instance;
-	public GameObject applePrefab;
-	public GameObject AppleParent;
-		
+
+
 	public GameCache gameCache;
+	public Chick chick;
+	public UIManager uiManger;
 
 	void Awake ()
 	{
