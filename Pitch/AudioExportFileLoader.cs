@@ -7,6 +7,7 @@ using System.IO;
 using System.Reflection.Emit;
 using System.Text.RegularExpressions;
 
+[System.Serializable]
 public struct AudioClipDic
 {
 	public float time;
@@ -23,8 +24,10 @@ public static class AudioExportFileLoader
 {
 	public static string regexEmpty = @"^(\d+.\d+):(\d+)$";
 
-	public static List<AudioClipDic> LoadAudioExportFile (string audioName)
+	public static List<AudioClipDic> LoadAudioExportFile (string audioName, out float min, out float max)
 	{
+		min = 10000000000;
+		max = 0;
 		if (string.IsNullOrEmpty (audioName))
 			return null;
 		List<AudioClipDic> list = new List<AudioClipDic> ();
@@ -35,14 +38,18 @@ public static class AudioExportFileLoader
 		string str;
 
 		while ((str = reader.ReadLine ()) != null) {
-			Debugger.Log (str);
 			if (string.IsNullOrEmpty (str))
 				continue;
 			Match empty = Regex.Match (str, regexEmpty);
+//			Debugger.Log (str);
 			if (empty.Success) {
-				list.Add (new AudioClipDic (float.Parse (empty.Groups [1].Value), float.Parse (empty.Groups [2].Value)));
+				float value = float.Parse (empty.Groups [2].Value);
+				min = Mathf.Min (min, value);
+				max = Mathf.Max (max, value);
+				list.Add (new AudioClipDic (float.Parse (empty.Groups [1].Value), value));
 			}
 		}
+		Debugger.Log (min + "  :" + max);
 		return list;
 	}
 }

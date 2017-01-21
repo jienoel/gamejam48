@@ -36,21 +36,23 @@ public class LRC : MonoBehaviour
 	public int timesample;
 	string regexString = @"^\[(\d{2}):(\d{2}).(\d{2})\](.+)$";
 	string regexEmpty = @"^\[(\d{2}):(\d{2}).(\d{2})\]$";
-	//	Dictionary<float,string> lyricsDic = new Dictionary<float, string> ();
 	public List<LyricCell> lyrics = new List<LyricCell> ();
-	List<AudioClipDic> clips;
+	public List<AudioClipDic> clips;
 	LyricCell current;
 	LyricCell next;
 	LyricCell next1;
 	LyricCell next2;
 	public SoundEvent musicEvent;
+	public float minPitch;
+	public float maxPitch;
 
 	private void Start ()
 	{
 		mp3 = gameObject.GetComponentInChildren<AudioSource> () as AudioSource;
 		path = Application.streamingAssetsPath + "/Trc/" + mp3.clip.name + ".lrc"; //获取歌词路径，并同步歌词和歌曲名称
 		ReadFile ();
-		clips = AudioExportFileLoader.LoadAudioExportFile (mp3.clip.name);
+		clips = AudioExportFileLoader.LoadAudioExportFile (mp3.clip.name, out minPitch, out maxPitch);
+
 		if (lyrics.Count > 2) {
 			next = lyrics [0];
 			next1 = lyrics [1];
@@ -89,8 +91,7 @@ public class LRC : MonoBehaviour
 			int milSecond = 0;
 			if (empty.Success) {
 				
-				Debugger.Log ("[Success] " + empty.Groups [0] + "  " + empty.Groups [1] + "  " + empty.Groups [2] + "   " + empty.Groups [3] 
-				);
+//				Debugger.Log ("[Success] " + empty.Groups [0] + "  " + empty.Groups [1] + "  " + empty.Groups [2] + "   " + empty.Groups [3] );
 				minute = int.Parse (empty.Groups [1].Value);
 				second = int.Parse (empty.Groups [2].Value);
 				milSecond = int.Parse (empty.Groups [3].Value);
@@ -98,14 +99,14 @@ public class LRC : MonoBehaviour
 			} else {
 				Match match = Regex.Match (str, regexString);
 				if (match.Success) {
-					Debugger.Log ("[Success] " + match.Groups [0] + "  " + match.Groups [1] + "  " + match.Groups [2] + "   " + match.Groups [3] +
-					match.Groups [4]);
+//					Debugger.Log ("[Success] " + match.Groups [0] + "  " + match.Groups [1] + "  " + match.Groups [2] + "   " + match.Groups [3] +
+//					match.Groups [4]);
 					minute = int.Parse (match.Groups [1].Value);
 					second = int.Parse (match.Groups [2].Value);
 					milSecond = int.Parse (match.Groups [3].Value);
 					lyrics.Add (new LyricCell (PackTime (minute, second, milSecond), match.Groups [4].Value));
-				} else
-					Debugger.Log ("[Fail]");
+				} //else
+//					Debugger.Log ("[Fail]");
 			}
 
 		}
@@ -119,11 +120,14 @@ public class LRC : MonoBehaviour
 	void FixedUpdate ()
 	{
 		music = mp3.time;
-		int index = clips.FindIndex (x => Mathf.Abs (x.time - music) < 0.01);
-		if (index >= 0 && musicEvent != null) {
-			musicEvent.Invoke (clips [index].pitch);
-			for (int i = 0; i < index; i++)
-				clips.RemoveAt (i);
+		if (clips != null && clips.Count > 0) {
+			int index = clips.FindIndex (x => Mathf.Abs (x.time - music) < 0.01);
+			if (index >= 0 && musicEvent != null) {
+				musicEvent.Invoke (clips [index].pitch);
+				for (int i = 0; i < index; i++)
+					clips.RemoveAt (i);
+			}
+
 		}
 
 		GameManager.Instance.uiManger.SetMusicProgress (music / mp3.clip.length);

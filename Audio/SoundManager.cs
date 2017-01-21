@@ -30,17 +30,16 @@ public class SoundManager : MonoBehaviour
 
 	}
 
-	// Update is called once per frame
-	void FixedUpdate ()
-	{
-		if (recordEvent != null) {
-			recordEvent.Invoke (AudioUtility.GetNoteFromFreq (AudioUtility.AnalyzeSound (recordAudioSource)));
-		}
-		if (musicEvent != null) {
-			musicEvent.Invoke (AudioUtility.GetNoteFromFreq (AudioUtility.AnalyzeSound (musicAudioSource)));
-		}
-		if (Input.GetKeyDown (KeyCode.K)) {
-			SavWav.Save ("record", recordAudioSource.clip);
-		}
+    // Update is called once per frame
+    void FixedUpdate () {
+        if (recordEvent != null) {
+            recordEvent.Invoke(AudioUtility.GetNoteFromFreq(AudioUtility.AnalyzeSound(recordAudioSource)));
+        }
+        if (musicEvent != null) {
+            musicEvent.Invoke(AudioUtility.GetNoteFromFreq(AudioUtility.AnalyzeSound(musicAudioSource)));
+        }
+        if (Input.GetKeyDown(KeyCode.K)) {
+            SavWav.Save("record", recordAudioSource.clip);
+        }
 	}
 }
