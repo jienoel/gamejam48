@@ -5,15 +5,32 @@ using UnityEngine;
 public class GameCache : MonoBehaviour
 {
 	public Queue<Apple> applecache = new Queue<Apple> ();
+	public Queue<PitchStep> pitchcache = new Queue<PitchStep> ();
 	public Apple applePrefab;
-	public Transform parent;
+	public Transform appleParent;
+	public PitchStep pitchStepPrefab;
+	public Transform pitchParent;
+
+	public PitchStep GetPitchStep ()
+	{
+		if (pitchcache.Count > 0) {
+			return pitchcache.Dequeue ();
+		}
+		return GameObject.Instantiate (pitchStepPrefab, pitchParent);
+	}
+
+	public void RecyclePitchStep (PitchStep pitchStep)
+	{
+		pitchStep.gameObject.SetActive (false);
+		pitchcache.Enqueue (pitchStep);
+	}
 
 	public Apple GetApple ()
 	{
 		if (applecache.Count > 0) {
 			return applecache.Dequeue ();
 		}
-		return GameObject.Instantiate (applePrefab, parent);
+		return GameObject.Instantiate (applePrefab, appleParent);
 	}
 
 	public void RecycleApple (Apple prop)
@@ -28,5 +45,10 @@ public class GameCache : MonoBehaviour
 			Apple prop = applecache.Dequeue ();
 			DestroyImmediate (prop.gameObject);
 		}	
+
+		while (pitchcache.Count > 0) {
+			PitchStep pitchStep = pitchcache.Dequeue ();
+			DestroyImmediate (pitchStep.gameObject);
+		}
 	}
 }

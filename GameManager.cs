@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
 	public GameCache gameCache;
 	public Chick chick;
 	public UIManager uiManger;
+	public PitchManager pitchManager;
+	public LRC lyric;
 
     public List<IGameState> states;
 
@@ -40,12 +42,12 @@ public class GameManager : MonoBehaviour
 
 	public void OnRecordEvent (float value)
 	{
-		
+		chick.MoveTo (value * 10);
 	}
 
 	public void OnMusicEvent (float value)
 	{
 //		Debugger.Log (value);
-		chick.MoveTo (value * 10);
+		pitchManager.OnMusicEvent (value);
 	}
 }

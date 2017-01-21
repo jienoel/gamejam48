@@ -11,6 +11,7 @@ public class Chick : MonoBehaviour
 	public float targetY;
 	public bool moving;
 	public float tolerance = 1f;
+	public float deltaTime = 0.5f;
 	// Use this for initialization
 	void Start ()
 	{
@@ -45,7 +46,7 @@ public class Chick : MonoBehaviour
 	{
 		Vector3 position = rect.localPosition;
 
-		float y = Mathf.Lerp (position.y, targetY, Time.deltaTime);
+		float y = Mathf.Lerp (position.y, targetY, deltaTime);
 		if (position.y != y) {
 			position.y = y;
 			rect.localPosition = position;

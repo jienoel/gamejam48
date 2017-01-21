@@ -7,36 +7,49 @@ using System.IO;
 using System.Reflection.Emit;
 using System.Text.RegularExpressions;
 
-public struct AudioClipDic
+[System.Serializable]
+public struct DoubleFloat
 {
 	public float time;
 	public float pitch;
+
+	public DoubleFloat (float time, float pitch)
+	{
+		this.pitch = pitch;
+		this.time = time;
+	}
 }
 
 public static class AudioExportFileLoader
 {
 	public static string regexEmpty = @"^(\d+.\d+):(\d+)$";
 
-	public static List<AudioClipDic> LoadAudioExportFile (string audioName)
+	public static List<DoubleFloat> LoadAudioExportFile (string audioName, out float min, out float max)
 	{
+		min = 10000000000;
+		max = 0;
 		if (string.IsNullOrEmpty (audioName))
 			return null;
-		List<AudioClipDic> list = new List<AudioClipDic> ();
+		List<DoubleFloat> list = new List<DoubleFloat> ();
 
-		string path = Application.streamingAssetsPath + "/Trc/" + audioName + ".txt";
+		string path = Application.streamingAssetsPath + "/Exp/" + audioName + ".txt";
 		FileInfo sr = new FileInfo (path);
 		var reader = sr.OpenText ();
 		string str;
 
 		while ((str = reader.ReadLine ()) != null) {
-			Debugger.Log (str);
 			if (string.IsNullOrEmpty (str))
 				continue;
 			Match empty = Regex.Match (str, regexEmpty);
+//			Debugger.Log (str);
 			if (empty.Success) {
-//				list.Add (new AudioClipDic (float.Parse (empty.Groups [1].Value), float.Parse (empty.Groups [2].Value)));
+				float value = float.Parse (empty.Groups [2].Value);
+				min = Mathf.Min (min, value);
+				max = Mathf.Max (max, value);
+				list.Add (new DoubleFloat (float.Parse (empty.Groups [1].Value), value));
 			}
 		}
+		Debugger.Log (min + "  :" + max);
 		return list;
 	}
 }
