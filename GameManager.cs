@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -7,9 +8,7 @@ public class GameManager : MonoBehaviour
 	public static GameManager Instance;
 
 	public GameCache gameCache;
-	public Chick chick;
-	public UIManager uiManger;
-	public PitchManager pitchManager;
+	public UIManager uiManager;
 	public LRC lyric;
 
     public List<IGameState> states;
@@ -21,7 +20,16 @@ public class GameManager : MonoBehaviour
             state = value;
             currentState = states[(int)value];
             currentState.Enter();
+            currentState.Run();
         }
+    }
+
+    public void ExitState() {
+        currentState.Exit();
+    }
+
+    public void ExitState(EGameState toState) {
+        currentState.Exit(toState);
     }
 
 	void Awake ()
@@ -31,6 +39,7 @@ public class GameManager : MonoBehaviour
 	}
 	// Use this for initialization
 	void Start () {
+        states = new List<IGameState>() {new GameStart(), new GameRun(), new GameEnd()};
 	    CurrentState = EGameState.WELCOME;
 	}
 	
@@ -42,12 +51,14 @@ public class GameManager : MonoBehaviour
 
 	public void OnRecordEvent (float value)
 	{
-		chick.MoveTo (value * 10);
+		uiManager.MoveChick(value * 10);
 	}
 
 	public void OnMusicEvent (float value)
 	{
 //		Debugger.Log (value);
-		pitchManager.OnMusicEvent (value);
-	}
+	    if (GameModel.Instance.PitchManager != null) {
+            GameModel.Instance.PitchManager.OnMusicEvent(value);
+        }
+    }
 }

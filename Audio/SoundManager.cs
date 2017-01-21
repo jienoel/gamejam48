@@ -19,16 +19,21 @@ public class SoundManager : MonoBehaviour
 	private int samplerate;
 
 	// Use this for initialization
-	void Start ()
-	{
+	void Start () {
+	    GameModel.Instance.SoundManager = this;
 		samplerate = AudioSettings.outputSampleRate;
 		recordAudioSource.clip = Microphone.Start (null, false, (int)musicAudioSource.clip.length, samplerate);
 		while (!(Microphone.GetPosition (null) > 0)) {
 		} // Wait until the recording has started
 		recordAudioSource.Play ();
 		musicAudioSource.Play ();
-
 	}
+
+    void Update() {
+        if (Input.GetKeyDown(KeyCode.A)) {
+            GameManager.Instance.currentState.Exit();
+        }
+    }
 
     // Update is called once per frame
     void FixedUpdate () {

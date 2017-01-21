@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts;
 using UnityEngine;
 
 public class PitchStep : MonoBehaviour
@@ -32,12 +33,12 @@ public class PitchStep : MonoBehaviour
 	public void SetStepLength (DoubleFloat data)
 	{
 		this.gameObject.SetActive (true);
-		float y = MathUtility.GetScreenPositionByAudioPitch (data.pitch, GameManager.Instance.pitchManager.max, GameManager.Instance.pitchManager.min, GameManager.Instance.pitchManager.height,
-			          GameManager.Instance.pitchManager.addon, GameManager.Instance.pitchManager.step);
+		float y = MathUtility.GetScreenPositionByAudioPitch (data.pitch, GameModel.Instance.PitchManager.max, GameModel.Instance.PitchManager.min, GameModel.Instance.PitchManager.height,
+                      GameModel.Instance.PitchManager.addon, GameModel.Instance.PitchManager.step);
 		pos = rect.localPosition;
 		pos.y = y;
 		rect.localPosition = pos;
-		speed = GameManager.Instance.pitchManager.speed;
+		speed = GameModel.Instance.PitchManager.speed;
 		moving = true;
 	}
 }

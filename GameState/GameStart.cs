@@ -4,21 +4,28 @@ using UnityEngine;
 
 public class GameStart : IGameState
 {
-    EGameState current = EGameState.WELCOME;
-	int next;
+    private EGameState current = EGameState.WELCOME;
+    private EGameState next = EGameState.RUN;
 
 	public void Enter ()
 	{
-		GameManager.Instance.uiManger.GoToState(current);
+		GameManager.Instance.uiManager.GoToState(current);
 	}
 
-	public int Run ()
+	public void Run ()
 	{
-		return next;
+		return ;
 	}
 
-	public void Exit ()
-	{
-		
+	public void Exit () {
+	    GameManager.Instance.uiManager.Exit();
+
+        GameManager.Instance.CurrentState = next;
 	}
+
+    public void Exit(EGameState toState) {
+        GameManager.Instance.uiManager.Exit();
+
+        GameManager.Instance.CurrentState = toState;
+    }
 }

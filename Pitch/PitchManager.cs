@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts;
 using UnityEngine;
 
 public class PitchManager : MonoBehaviour
@@ -18,8 +19,8 @@ public class PitchManager : MonoBehaviour
 	public float tolerant = 0.5f;
 	public float height = 1044f;
 	// Use this for initialization
-	void Start ()
-	{
+	void Start () {
+	    GameModel.Instance.PitchManager = this;
 //		lists = new List<DoubleFloat> ();
 //		showTime = new List<float> ();
 	}

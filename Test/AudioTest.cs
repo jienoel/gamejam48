@@ -7,15 +7,16 @@ using System.Linq;
 
 public class AudioTest : MonoBehaviour
 {
-	public AudioSource source;
+	public AudioSource recordAudioSource;
 
 	public float max;
 	public float min;
 
-	void Update ()
+	void Start ()
 	{
-		max = Mathf.Max (source.pitch, max);
-		min = Mathf.Min (source.pitch, min);
-		Debugger.Log (source.pitch);
-	}
+        recordAudioSource.clip = Microphone.Start(null, false, 10, 44100);
+        while (!(Microphone.GetPosition(null) > 0)) {
+        } // Wait until the recording has started
+        recordAudioSource.Play();
+    }
 }

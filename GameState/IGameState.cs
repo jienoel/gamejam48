@@ -12,9 +12,10 @@ public interface IGameState
 {
 	void Enter ();
 
-	int Run ();
+	void Run ();
 
 	void Exit ();
 
+    void Exit(EGameState toState);
 
 }
