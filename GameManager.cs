@@ -10,15 +10,26 @@ public class GameManager : MonoBehaviour
 	public Chick chick;
 	public UIManager uiManger;
 
+    public List<IGameState> states;
+
+    public IGameState currentState { get; private set; }
+    private EGameState state;
+    public EGameState CurrentState {
+        set {
+            state = value;
+            currentState = states[(int)value];
+            currentState.Enter();
+        }
+    }
+
 	void Awake ()
 	{
 		if (Instance == null)
 			Instance = this;
 	}
 	// Use this for initialization
-	void Start ()
-	{
-		
+	void Start () {
+	    CurrentState = EGameState.WELCOME;
 	}
 	
 	// Update is called once per frame
