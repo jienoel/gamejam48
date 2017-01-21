@@ -35,7 +35,7 @@ namespace Assets.Scripts {
                 // find max
                 if (spectrum[i] > maxV && spectrum[i] > 0.001) {
                     peaks.Add(new Peak(spectrum[i], i));
-                    if (peaks.Count > 5) {
+                    if (peaks.Count > 10) {
                         // get the 5 peaks in the sample with the highest amplitudes
                         peaks.Sort(new AmpComparer()); // sort peak amplitudes from highest to lowest
                         //peaks.Remove (peaks [5]); // remove peak with the lowest amplitude

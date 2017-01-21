@@ -26,7 +26,7 @@ public class SoundManager : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update () {
+    void FixedUpdate () {
         if (recordEvent != null) {
             recordEvent.Invoke(AudioUtility.GetNoteFromFreq(AudioUtility.AnalyzeSound(recordAudioSource)));
         }
