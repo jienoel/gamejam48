@@ -2,7 +2,8 @@
 using System.Collections;
 using System.Text;
 using System.IO;
-using System.Linq;
+
+//using System.Linq;
 using System.Reflection.Emit;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
@@ -120,13 +121,13 @@ public class LRC : MonoBehaviour
 		if (next == null)
 			return;
 
-		float diff = music - next.time;
-		Debugger.Log (music + "    " + diff);
-		if (diff >= 0 && diff <= tolerance) {
+
+//		Debugger.Log (music + "    " + diff);
+		if (Mathf.Abs (music - next.time) <= tolerance) {
 			current = next;
 			MusicLrc.text = current.lyric;
 			if (next1 != null) {
-				Debugger.Log ("Next:" + next1.time);
+//				Debugger.Log ("Next:" + next1.time);
 				MusicLrc1.text = next1.lyric;
 			} else
 				return;
