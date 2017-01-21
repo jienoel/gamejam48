@@ -16,9 +16,9 @@ public class MusicExport : MonoBehaviour
 	string regexString = @"^\[(\d{2}):(\d{2}).(\d{2})\](.+)$";
 	string regexEmpty = @"^\[(\d{2}):(\d{2}).(\d{2})\]$";
 	public List<LyricCell> lyrics = new List<LyricCell> ();
-	public List<AudioClipDic> efficient = new List<AudioClipDic> ();
+	public List<DoubleFloat> efficient = new List<DoubleFloat> ();
 	string path;
-	public AudioClipDic current;
+	public DoubleFloat current;
 	AudioSource mp3;
 	public bool play;
 
@@ -61,7 +61,7 @@ public class MusicExport : MonoBehaviour
 				lyrics.Add (new LyricCell (PackTime (minute, second, milSecond), ""));
 				if (start != -1) {
 					end = PackTime (minute, second, milSecond);
-					efficient.Add (new AudioClipDic (start, end));
+					efficient.Add (new DoubleFloat (start, end));
 					start = -1;
 					end = -1;
 				}

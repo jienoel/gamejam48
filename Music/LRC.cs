@@ -37,7 +37,7 @@ public class LRC : MonoBehaviour
 	string regexString = @"^\[(\d{2}):(\d{2}).(\d{2})\](.+)$";
 	string regexEmpty = @"^\[(\d{2}):(\d{2}).(\d{2})\]$";
 	public List<LyricCell> lyrics = new List<LyricCell> ();
-	public List<AudioClipDic> clips;
+	public List<DoubleFloat> clips;
 	LyricCell current;
 	LyricCell next;
 	LyricCell next1;
@@ -52,7 +52,13 @@ public class LRC : MonoBehaviour
 		path = Application.streamingAssetsPath + "/Trc/" + mp3.clip.name + ".lrc"; //获取歌词路径，并同步歌词和歌曲名称
 		ReadFile ();
 		clips = AudioExportFileLoader.LoadAudioExportFile (mp3.clip.name, out minPitch, out maxPitch);
-
+		GameManager.Instance.pitchManager.min = minPitch;
+		GameManager.Instance.pitchManager.max = maxPitch;
+		for (int i = 0; i < clips.Count; i++) {
+			DoubleFloat data = clips [i];
+			GameManager.Instance.pitchManager.SetPitchStepData (data.pitch, data.time);
+		}
+//		GameManager.Instance.pitchManager.SetPitchStepData()
 		if (lyrics.Count > 2) {
 			next = lyrics [0];
 			next1 = lyrics [1];
