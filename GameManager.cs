@@ -6,7 +6,6 @@ public class GameManager : MonoBehaviour
 {
 	public static GameManager Instance;
 
-
 	public GameCache gameCache;
 	public Chick chick;
 	public UIManager uiManger;
@@ -26,5 +25,16 @@ public class GameManager : MonoBehaviour
 	void Update ()
 	{
 		
+	}
+
+	public void OnRecordEvent (float value)
+	{
+		
+	}
+
+	public void OnMusicEvent (float value)
+	{
+//		Debugger.Log (value);
+		chick.MoveTo (value * 10);
 	}
 }

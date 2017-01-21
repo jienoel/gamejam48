@@ -6,16 +6,52 @@ public class Chick : MonoBehaviour
 {
 	public int maxHp;
 	public int hp;
+	public RectTransform rect;
+
+	public float targetY;
+	public bool moving;
+	public float tolerance = 1f;
 	// Use this for initialization
 	void Start ()
 	{
-		
+		if (rect == null)
+			rect = GetComponent<RectTransform> ();
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
 		
+
+		if (moving) {
+			Move ();
+		}
+
+		if (moving && Mathf.Abs (targetY - rect.localPosition.y) <= tolerance) {
+			moving = false;
+		}
+	}
+
+	public void MoveTo (float y)
+	{
+		if (targetY != y)
+			targetY = y;
+		if (!moving) {
+			moving = true;
+		}
+	}
+
+	void Move ()
+	{
+		Vector3 position = rect.localPosition;
+
+		float y = Mathf.Lerp (position.y, targetY, Time.deltaTime);
+		if (position.y != y) {
+			position.y = y;
+			rect.localPosition = position;
+		} else {
+			moving = false;
+		}
 	}
 
 	public void OnHitApple (Apple prop)
