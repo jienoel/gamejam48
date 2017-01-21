@@ -115,6 +115,7 @@ public class LRC : MonoBehaviour
 	void FixedUpdate ()
 	{
 		music = mp3.time;
+		GameManager.Instance.uiManger.SetMusicProgress (music / mp3.clip.length);
 		timesample = mp3.timeSamples;
 		if (next == null)
 			return;
