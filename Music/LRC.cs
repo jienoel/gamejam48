@@ -38,16 +38,19 @@ public class LRC : MonoBehaviour
 	string regexEmpty = @"^\[(\d{2}):(\d{2}).(\d{2})\]$";
 	//	Dictionary<float,string> lyricsDic = new Dictionary<float, string> ();
 	public List<LyricCell> lyrics = new List<LyricCell> ();
+	List<AudioClipDic> clips;
 	LyricCell current;
 	LyricCell next;
 	LyricCell next1;
 	LyricCell next2;
+	public SoundEvent musicEvent;
 
 	private void Start ()
 	{
 		mp3 = gameObject.GetComponentInChildren<AudioSource> () as AudioSource;
 		path = Application.streamingAssetsPath + "/Trc/" + mp3.clip.name + ".lrc"; //获取歌词路径，并同步歌词和歌曲名称
 		ReadFile ();
+		clips = AudioExportFileLoader.LoadAudioExportFile (mp3.clip.name);
 		if (lyrics.Count > 2) {
 			next = lyrics [0];
 			next1 = lyrics [1];
@@ -116,6 +119,13 @@ public class LRC : MonoBehaviour
 	void FixedUpdate ()
 	{
 		music = mp3.time;
+		int index = clips.FindIndex (x => Mathf.Abs (x.time - music) < 0.01);
+		if (index >= 0 && musicEvent != null) {
+			musicEvent.Invoke (clips [index].pitch);
+			for (int i = 0; i < index; i++)
+				clips.RemoveAt (i);
+		}
+
 		GameManager.Instance.uiManger.SetMusicProgress (music / mp3.clip.length);
 		timesample = mp3.timeSamples;
 		if (next == null)

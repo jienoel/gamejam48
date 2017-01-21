@@ -11,6 +11,12 @@ public struct AudioClipDic
 {
 	public float time;
 	public float pitch;
+
+	public AudioClipDic (float time, float pitch)
+	{
+		this.pitch = pitch;
+		this.time = time;
+	}
 }
 
 public static class AudioExportFileLoader
@@ -23,7 +29,7 @@ public static class AudioExportFileLoader
 			return null;
 		List<AudioClipDic> list = new List<AudioClipDic> ();
 
-		string path = Application.streamingAssetsPath + "/Trc/" + audioName + ".txt";
+		string path = Application.streamingAssetsPath + "/Exp/" + audioName + ".txt";
 		FileInfo sr = new FileInfo (path);
 		var reader = sr.OpenText ();
 		string str;
