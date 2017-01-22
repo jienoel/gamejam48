@@ -26,6 +26,7 @@ public class GameRun : IGameState
 	public void Exit ()
 	{
 		GameObject.Destroy (soundManager);
+        GameManager.Instance.gameCache.Clear();
 		GameManager.Instance.uiManager.Exit ();
 		GameManager.Instance.CurrentState = next;
 	}
