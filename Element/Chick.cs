@@ -15,6 +15,7 @@ public class Chick : MonoBehaviour
 	public float deltaTime = 0.5f;
 
     public int hurtSpeed;
+    private bool once = false;
 	// Use this for initialization
 	void Start () {
 	    GameManager.Instance.uiManager.chick = this;
@@ -24,8 +25,12 @@ public class Chick : MonoBehaviour
 	
 	// Update is called once per frame
 	void Update () {
+	    if (!once) {
+            GameModel.Instance.SoundManager.onWin += onWin;
+	        once = true;
+	    }
 
-	    hp -= (hurtSpeed*Time.deltaTime);
+        hp -= (hurtSpeed*Time.deltaTime);
         float ratio = ((float)hp) / maxHp;
         GameManager.Instance.uiManager.SetChickHp(ratio);
         if (hp <= 0) {
@@ -80,4 +85,9 @@ public class Chick : MonoBehaviour
 	        GameManager.Instance.ExitState();
 	    }
 	}
+
+    void onWin() {
+        GameModel.Instance.score = (int)hp;
+        GameModel.Instance.SoundManager.onWin -= onWin;
+    }
 }

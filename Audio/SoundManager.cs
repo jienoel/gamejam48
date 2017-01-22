@@ -19,6 +19,8 @@ public class SoundManager : MonoBehaviour
 	public SoundEvent musicEvent;
 	private int samplerate;
 	public LRC lyric;
+
+    public Action onWin;
 	// Use this for initialization
 	void Start ()
 	{
@@ -47,6 +49,11 @@ public class SoundManager : MonoBehaviour
         if (recordEvent != null) {
             recordEvent.Invoke(AudioUtility.GetNoteFromFreq(AudioUtility.AnalyzeSound(recordAudioSource)));
         }
+
+	    if (!recordAudioSource.isPlaying) {
+            onWin.Invoke();
+	        GameManager.Instance.ExitState();
+	    }
 
     }
 
