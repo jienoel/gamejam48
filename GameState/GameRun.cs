@@ -32,6 +32,8 @@ public class GameRun : IGameState
 
 	public void Exit (EGameState toState)
 	{
-		throw new System.NotImplementedException ();
-	}
+        GameObject.Destroy(soundManager);
+        GameManager.Instance.uiManager.Exit();
+        GameManager.Instance.CurrentState = toState;
+    }
 }

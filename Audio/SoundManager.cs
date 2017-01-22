@@ -41,14 +41,15 @@ public class SoundManager : MonoBehaviour
 		if (Input.GetKeyDown (KeyCode.A)) {
 			GameManager.Instance.currentState.Exit ();
 		}
-	}
+        if (recordEvent != null) {
+            recordEvent.Invoke(AudioUtility.GetNoteFromFreq(AudioUtility.AnalyzeSound(recordAudioSource)));
+        }
 
-	// Update is called once per frame
-	void FixedUpdate ()
+    }
+
+    // Update is called once per frame
+    void FixedUpdate ()
 	{
-		if (recordEvent != null) {
-			recordEvent.Invoke (AudioUtility.GetNoteFromFreq (AudioUtility.AnalyzeSound (recordAudioSource)));
-		}
 		if (musicEvent != null) {
 			musicEvent.Invoke (AudioUtility.GetNoteFromFreq (AudioUtility.AnalyzeSound (musicAudioSource)));
 		}

@@ -1,30 +1,39 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts;
 using UnityEngine;
 
 public class Chick : MonoBehaviour
 {
 	public int maxHp;
-	public int hp;
+	public float hp;
 	public RectTransform rect;
 
 	public float targetY;
 	public bool moving;
 	public float tolerance = 1f;
 	public float deltaTime = 0.5f;
+
+    public int hurtSpeed;
 	// Use this for initialization
-	void Start ()
-	{
+	void Start () {
+	    GameManager.Instance.uiManager.chick = this;
 		if (rect == null)
 			rect = GetComponent<RectTransform> ();
 	}
 	
 	// Update is called once per frame
-	void Update ()
-	{
-		
+	void Update () {
 
-		if (moving) {
+	    hp -= (hurtSpeed*Time.deltaTime);
+        float ratio = ((float)hp) / maxHp;
+        GameManager.Instance.uiManager.SetChickHp(ratio);
+        if (hp <= 0) {
+            GameManager.Instance.ExitState();
+        }
+
+
+        if (moving) {
 			Move ();
 		}
 
@@ -57,7 +66,7 @@ public class Chick : MonoBehaviour
 
 	public void OnHitApple (Apple prop)
 	{
-		int hpBefore = hp;
+		float hpBefore = hp;
 		if (prop.damageType == DamageType.Heal) {
 			hp = Mathf.Min (maxHp, hp + prop.hp);
 		} else {
@@ -67,5 +76,8 @@ public class Chick : MonoBehaviour
 			float ratio = ((float)hp) / maxHp;
 			GameManager.Instance.uiManager.SetChickHp (ratio);
 		}
+	    if (hp == 0) {
+	        GameManager.Instance.ExitState();
+	    }
 	}
 }
