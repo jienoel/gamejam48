@@ -45,17 +45,30 @@ public class AppleGenerator : MonoBehaviour
 
 	public void Play ()
 	{
-//        StartCoroutine(GenerateTrap());
+//		StartCoroutine (GenerateTrap ());
 //        StartCoroutine(PlaceApple());
+
 	}
 
-	IEnumerator GenerateTrap ()
+	//	float sum;
+
+
+	//	float timeStep = Clipping.length / trapCount.count;
+	//	float deltaTime = (float)(timeRandom.NextDouble () - 0.5) + timeStep;
+	//	sum += deltaTime;
+
+	//	IEnumerator GenerateTrap ()
+	//	{
+	//		var timeStep = music.clip.length / trapCount;
+	//		while (true) {
+	//			yield return new WaitForSecondsRealtime ((float)(timeRandom.NextDouble () - 0.5) + timeStep);
+	//			isTrap = true;
+	//		}
+	//	}
+
+	bool IsTrap ()
 	{
-		var timeStep = music.clip.length / trapCount;
-		while (true) {
-			yield return new WaitForSecondsRealtime ((float)(timeRandom.NextDouble () - 0.5) + timeStep);
-			isTrap = true;
-		}
+		return (timeRandom.NextDouble () - 0.8f) > 0;
 	}
 
 	void SetPlaceApple (float y, float x, DamageType damageType)
@@ -75,25 +88,31 @@ public class AppleGenerator : MonoBehaviour
 	{
 		int retValue = 0;
 		bool isBad = false;
-		while (true) {
-			isBad = false;
-			retValue = value;
-			if (isTrap) {
-				var delta = (int)((heightRandom.NextDouble () - 0.5) * (int)difficulty);
-				if (appleRandom.NextDouble () < badApple) {
-					delta = -Mathf.Abs (delta);
-					isBad = true;
-				}
-				retValue += delta;
-				isTrap = false;
-				SetPlaceApple (retValue, posX, isBad ? DamageType.Damage : DamageType.Heal);
+//		while (true) {
+		isBad = false;
+		retValue = value;
+//		Debugger.Log (retValue);
+		if (IsTrap ()) {
+//			Debugger.LogError ("Apple");
+			var delta = (int)((heightRandom.NextDouble () - 0.5) * (int)difficulty);
+			if (appleRandom.NextDouble () < badApple) {
+				delta = -Mathf.Abs (delta);
+				isBad = true;
+			}
+			retValue += delta;
+//			isTrap = false;
+			float y = MathUtility.GetScreenPositionByAudioPitch (retValue,
+					        
+				          GameModel.Instance.PitchManager.max, GameModel.Instance.PitchManager.min,
+				          GameModel.Instance.PitchManager.height, GameModel.Instance.PitchManager.addon, GameModel.Instance.PitchManager.step);
+			SetPlaceApple (y, posX, isBad ? DamageType.Damage : DamageType.Heal);
 //				if (onAppleGenerated != null) {
 //					onAppleGenerated.Invoke (retValue, isBad);
 //				}
-			}
-			text.text = retValue.ToString ();
-//			yield return new WaitForSecondsRealtime (appleMargin);
 		}
+//			text.text = retValue.ToString ();
+//			yield return new WaitForSecondsRealtime (appleMargin);
+//		}
 	}
 
 }

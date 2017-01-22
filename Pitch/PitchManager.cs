@@ -78,10 +78,13 @@ public class PitchManager : MonoBehaviour
 	}
 
 
+
+
 	public void SetPitchStepData (float value, float time)
 	{
-
+		
 		int index = MathUtility.GetStepIndexByPitch (value, max, min, addon, step);
+		GameModel.Instance.SoundManager.appleGenerator.PlaceApple (index, 50 + time * speed);
 		if (currIndex != index) {
 			if (start == -1 && time > end) {
 				start = time;
@@ -108,7 +111,7 @@ public class PitchManager : MonoBehaviour
 				start = -1;
 			} 
 			currIndex = index;
-			Debugger.Log (index + "  " + value + " " + max + "  " + min + " " + addon + "  " + step);
+//			Debugger.Log (index + "  " + value + " " + max + "  " + min + " " + addon + "  " + step);
 		}
 	}
 

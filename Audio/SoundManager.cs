@@ -20,9 +20,14 @@ public class SoundManager : MonoBehaviour
 	private int samplerate;
 	public LRC lyric;
 	// Use this for initialization
-	void Start ()
+	void Awake ()
 	{
 		GameModel.Instance.SoundManager = this;
+	}
+
+	void Start ()
+	{
+		
 		samplerate = AudioSettings.outputSampleRate;
 		recordAudioSource.clip = Microphone.Start (null, false, (int)musicAudioSource.clip.length, samplerate);
 		while (!(Microphone.GetPosition (null) > 0)) {
