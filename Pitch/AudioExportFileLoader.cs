@@ -28,7 +28,7 @@ public static class AudioExportFileLoader
 	{
 		min = 10000000000;
 		max = 0;
-		Debug.LogError ("path");
+//		Debug.LogError ("path");
 		if (string.IsNullOrEmpty (audioName))
 			return null;
 		List<DoubleFloat> list = new List<DoubleFloat> ();

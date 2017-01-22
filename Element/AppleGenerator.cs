@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections;
+using System.Net;
 using Assets.Scripts;
 using UnityEngine.UI;
 
@@ -13,12 +14,14 @@ public enum Difficulty {
 public class AppleGenerator : MonoBehaviour {
     private System.Random heightRandom;
     private System.Random timeRandom;
+    private System.Random appleRandom;
 
     public AudioSource music;
     public float appleMargin = 1;
     public int trapCount = 50;
     public Difficulty difficulty;
-    public Action<int> onAppleGenerated;
+    public Action<int, bool> onAppleGenerated;
+    public float badApple;
 
     public Text text;
 
@@ -31,6 +34,8 @@ public class AppleGenerator : MonoBehaviour {
     public void Init(int seed = 0) {
         heightRandom = new System.Random(seed);
         timeRandom = new System.Random(seed);
+        appleRandom = new System.Random(seed);
+        
         Play();
     }
 
@@ -48,14 +53,21 @@ public class AppleGenerator : MonoBehaviour {
     }
 
     IEnumerator PlaceApple() {
-        int retValue = 0; 
+        int retValue = 0;
+        bool isBad = false;
         while (true) {
+            isBad = false;
             retValue = AudioUtility.GetNoteFromFreq(AudioUtility.AnalyzeSound(music));
             if (isTrap) {
-                retValue += (int)((heightRandom.NextDouble() - 0.5)*(int)difficulty);
+                var delta = (int) ((heightRandom.NextDouble() - 0.5)*(int) difficulty);
+                if (appleRandom.NextDouble() < badApple) {
+                    delta = -Mathf.Abs(delta);
+                    isBad = true;
+                }
+                retValue += delta;
                 isTrap = false;
                 if (onAppleGenerated != null) {
-                    onAppleGenerated.Invoke(retValue);
+                    onAppleGenerated.Invoke(retValue, isBad);
                 }
             }
             text.text = retValue.ToString();

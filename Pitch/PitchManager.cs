@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts;
 using UnityEngine;
 using System.Text;
 
@@ -18,11 +19,18 @@ public class PitchManager : MonoBehaviour
 	public float speed = 10;
 	public float tolerant = 0.5f;
 	public float height = 1044f;
-
+	public float duration = 0.5f;
 	string formater = "{0}:{1}:{2}";
 	// Use this for initialization
+
+	void Awake ()
+	{
+		GameModel.Instance.PitchManager = this;
+	}
+
 	void Start ()
 	{
+		
 //		lists = new List<DoubleFloat> ();
 //		showTime = new List<float> ();
 
@@ -61,9 +69,27 @@ public class PitchManager : MonoBehaviour
 		}
 	}
 
-
-
 	public void SetPitchStepData (float value, float time)
+	{
+
+		int index = MathUtility.GetStepIndexByPitch (value, max, min, addon, step);
+		if (currIndex != index) {
+			if (start == -1 && time > end) {
+				start = time;
+				end = time + duration;
+				showTime.Add (MathUtility.PitchShowTime (windowSize, speed, time));
+				lists.Add (new DoubleFloat (end - start, currIndex));
+				PlacePitch (start, new DoubleFloat (end - start, currIndex));
+				start = -1;
+			} 
+			currIndex = index;
+			Debugger.Log (index + "  " + value + " " + max + "  " + min + " " + addon + "  " + step);
+		}
+	}
+
+
+
+	public void SetPitchStepData1 (float value, float time)
 	{
 
 		int index = MathUtility.GetStepIndexByPitch (value, max, min, addon, step);
@@ -75,6 +101,7 @@ public class PitchManager : MonoBehaviour
 				showTime.Add (MathUtility.PitchShowTime (windowSize, speed, time));
 				lists.Add (new DoubleFloat (end - start, currIndex));
 				PlacePitch (start, new DoubleFloat (end - start, currIndex));
+//				PlacePitch (start, new DoubleFloat (duration, currIndex));
 				start = time;
 				end = -1;
 
@@ -89,8 +116,8 @@ public class PitchManager : MonoBehaviour
 		if (MusicExport.Instance != null)
 			MusicExport.Instance.Export1 (string.Format (formater, time, data.time, data.pitch));
 		PitchStep step = GameManager.Instance.gameCache.GetPitchStep ();
-		float y = MathUtility.GetScreenPositionByAudioPitch (data.pitch, GameManager.Instance.pitchManager.max, GameManager.Instance.pitchManager.min, GameManager.Instance.pitchManager.height,
-			          GameManager.Instance.pitchManager.addon, GameManager.Instance.pitchManager.step);
+		float y = MathUtility.GetScreenPositionByAudioPitch (data.pitch, GameModel.Instance.PitchManager.max, GameModel.Instance.PitchManager.min, GameModel.Instance.PitchManager.height,
+			          GameModel.Instance.PitchManager.addon, GameModel.Instance.PitchManager.step);
 		Vector3 pos = step.rect.localPosition;
 		pos.y = y;
 		pos.x = 50 + time * speed;

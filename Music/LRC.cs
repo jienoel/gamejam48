@@ -7,6 +7,7 @@ using System.IO;
 using System.Reflection.Emit;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
+using Assets.Scripts;
 
 //using Boo.Lang;
 using UnityEngine;
@@ -28,8 +29,6 @@ public class LyricCell
 public class LRC : MonoBehaviour
 {
 	public float tolerance = 0.1f;
-	public Text MusicLrc;
-	public Text MusicLrc1;
 	private AudioSource mp3;
 	public string path;
 	public float music;
@@ -54,16 +53,17 @@ public class LRC : MonoBehaviour
 
 	public void Init ()
 	{
+		musicEvent.AddListener (GameManager.Instance.OnMusicEvent);
 		mp3 = gameObject.GetComponentInChildren<AudioSource> () as AudioSource;
 		path = Application.streamingAssetsPath + "/Trc/" + mp3.clip.name + ".lrc"; //获取歌词路径，并同步歌词和歌曲名称
 		ReadFile ();
 		clips = AudioExportFileLoader.LoadAudioExportFile (mp3.clip.name, out minPitch, out maxPitch);
 
-		GameManager.Instance.pitchManager.min = 10;
-		GameManager.Instance.pitchManager.max = maxPitch;
+		GameModel.Instance.PitchManager.min = minPitch;
+		GameModel.Instance.PitchManager.max = maxPitch;
 		for (int i = 0; i < clips.Count; i++) {
 			DoubleFloat data = clips [i];
-			GameManager.Instance.pitchManager.SetPitchStepData (data.pitch, data.time);
+			GameModel.Instance.PitchManager.SetPitchStepData (data.pitch, data.time);
 		}
 		//		GameManager.Instance.pitchManager.SetPitchStepData()
 		if (lyrics.Count > 2) {
@@ -144,7 +144,7 @@ public class LRC : MonoBehaviour
 
 		}
 
-		GameManager.Instance.uiManger.SetMusicProgress (music / mp3.clip.length);
+		GameManager.Instance.uiManager.SetMusicProgress (music / mp3.clip.length);
 		timesample = mp3.timeSamples;
 		if (next == null)
 			return;
@@ -153,10 +153,10 @@ public class LRC : MonoBehaviour
 //		Debugger.Log (music + "    " + diff);
 		if (Mathf.Abs (music - next.time) <= tolerance) {
 			current = next;
-			MusicLrc.text = current.lyric;
+			GameManager.Instance.uiManager.lyrics.text = current.lyric;
 			if (next1 != null) {
-//				Debugger.Log ("Next:" + next1.time);
-				MusicLrc1.text = next1.lyric;
+				//				Debugger.Log ("Next:" + next1.time);
+				GameManager.Instance.uiManager.lyrics1.text = next1.lyric;
 			} else
 				return;
 			next = next1;

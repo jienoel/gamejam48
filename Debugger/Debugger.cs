@@ -113,7 +113,7 @@ public class Debugger : MonoBehaviour
 			lock (threadedLogs) {
 				for (int i = 0; i < threadedLogs.Count; i++) {
 					DebugLogVO l = threadedLogs [i];
-					HandleLog (l.logString, l.stackTrace, (LogType)l.logType);
+//					HandleLog (l.logString, l.stackTrace, (LogType)l.logType);
 				}
 				threadedLogs.Clear ();
 			}
@@ -229,58 +229,6 @@ public class Debugger : MonoBehaviour
 			threadedLogs.Add (vo);
 		}
 	}
-
-
-	private  void HandleLog (string logString, string stackTrace, LogType type)
-	{
-		#if !UNITY_EDITOR
-        if (commonString == null)
-        {
-
-            TextBuilder tb = StringUtils.B();
-            tb.Str("OperatingSystem : ");
-            tb.Str(SystemInfo.operatingSystem);
-            tb.Str("DeviceModel : ");
-            tb.Str(SystemInfo.deviceModel);
-            tb.Str("DeviceName : ");
-            tb.Str(SystemInfo.deviceName);
-            tb.Str("DeviceType : ");
-            tb.Str(SystemInfo.deviceType.ToString());
-            tb.Str("NpotSupport : ");
-            tb.Str(SystemInfo.npotSupport.ToString());
-            tb.Str("SystemMemorySize : ");
-            tb.Int(SystemInfo.systemMemorySize);
-            tb.Str("MB ");
-            commonString = tb.Get();
-            TextToFile.WriteToFile(commonString, writeType);
-        }
-        TextBuilder b = StringUtils.B();
-//		b.Str (commonString);
-        b.Str("\n");
-        b.Str("type = ");
-        b.Int((int)type);
-        b.Str(" logString ");
-        b.Str(logString);
-        b.Str(" stackTrace ");
-        b.Str(stackTrace);
-        //TODO send log to server
-//		#if !UNITY_EDITOR
-        if (Game.loginService.isLogin)
-        {
-            if (type == LogType.Assert || type == LogType.Error || type == LogType.Exception)
-            {
-                SendLogToServer(b.Get());
-            }
-        }
-//		#endif
-
-        TextToFile.WriteToFile(b.Get(), writeType);
-		#else
-		if (type == LogType.Log || type == LogType.Error)
-			TextToFile.WriteToFile (logString, writeType);
-		#endif
-	}
-
 
 
 	private void SendLogToServer (string message)

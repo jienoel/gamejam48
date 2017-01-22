@@ -65,7 +65,7 @@ public class Chick : MonoBehaviour
 		}
 		if (hpBefore != hp) {
 			float ratio = ((float)hp) / maxHp;
-			GameManager.Instance.uiManger.SetChickHp (ratio);
+			GameManager.Instance.uiManager.SetChickHp (ratio);
 		}
 	}
 }

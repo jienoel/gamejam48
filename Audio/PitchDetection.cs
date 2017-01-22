@@ -48,20 +48,7 @@ namespace PitchDetection
 		}
 
 
-		void PlacePitch (float time, DoubleFloat data)
-		{
-			PitchStep step = GameManager.Instance.gameCache.GetPitchStep ();
-			float y = MathUtility.GetScreenPositionByAudioPitch (data.pitch, GameManager.Instance.pitchManager.max, GameManager.Instance.pitchManager.min, GameManager.Instance.pitchManager.height,
-				          GameManager.Instance.pitchManager.addon, GameManager.Instance.pitchManager.step);
-			Vector3 pos = step.rect.localPosition;
-			pos.y = y;
-			pos.x = 50 + time * GameManager.Instance.pitchManager.speed;
-			step.rect.localPosition = pos;
-			Rect rect = step.rect.rect;
-			rect.width = MathUtility.PitchStepWidth (GameManager.Instance.pitchManager.speed, data.time);
-			step.rect.sizeDelta = new Vector2 (rect.width, rect.height);
 
-		}
 
 		void OnRenderObject ()
 		{
