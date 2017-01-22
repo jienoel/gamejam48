@@ -21,17 +21,28 @@ public class MusicExport : MonoBehaviour
 	public DoubleFloat current;
 	AudioSource mp3;
 	public bool play;
+	public static MusicExport Instance;
+
+	void Awake ()
+	{
+		Instance = this;
+	}
 
 	void Start ()
 	{
+		
+//		efficient.Remove (current);
+	}
+
+	public void Init ()
+	{
 		mp3 = GetComponent<AudioSource> ();
-		fs = new FileStream (Application.streamingAssetsPath + "/Exp/" + mp3.clip.name + ".txt", FileMode.Create);
+		fs = new FileStream (Application.streamingAssetsPath + "/Exp/" + mp3.clip.name + "1.txt", FileMode.Create);
 		sw = new StreamWriter (fs);
 		path = Application.streamingAssetsPath + "/Trc/" + mp3.clip.name + ".lrc"; //获取歌词路径，并同步歌词和歌曲名称
-		ReadFile ();
+		//		ReadFile ();
 		if (efficient.Count > index)
 			current = efficient [index++];
-//		efficient.Remove (current);
 	}
 
 	//打开歌词文件
@@ -94,6 +105,13 @@ public class MusicExport : MonoBehaviour
 			mp3.Play ();
 			play = false;
 		}
+
+	}
+
+	public void Export1 (string line)
+	{
+		
+		sw.WriteLine (line);
 	}
 
 	float PackTime (int minite, int second, int milSecond)
@@ -105,6 +123,8 @@ public class MusicExport : MonoBehaviour
 	// Update is called once per frame
 	void FixedUpdate ()
 	{
+//		sw.WriteLine (String.Format ("{0}:{1}", mp3.time, AudioUtility.GetNoteFromFreq (AudioUtility.AnalyzeSound (mp3))));
+		return;
 		if (current.time == 0 || current.pitch == 0)
 			return;
 		if (mp3.time >= current.time && mp3.time <= current.pitch) {

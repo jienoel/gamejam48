@@ -20,7 +20,9 @@ public class GameManager : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		
+		MusicExport.Instance.Init ();
+		pitchManager.Init ();
+		lyric.Init ();
 	}
 	
 	// Update is called once per frame

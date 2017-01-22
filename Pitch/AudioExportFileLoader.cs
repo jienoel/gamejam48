@@ -28,11 +28,13 @@ public static class AudioExportFileLoader
 	{
 		min = 10000000000;
 		max = 0;
+		Debug.LogError ("path");
 		if (string.IsNullOrEmpty (audioName))
 			return null;
 		List<DoubleFloat> list = new List<DoubleFloat> ();
 
 		string path = Application.streamingAssetsPath + "/Exp/" + audioName + ".txt";
+
 		FileInfo sr = new FileInfo (path);
 		var reader = sr.OpenText ();
 		string str;
@@ -46,6 +48,7 @@ public static class AudioExportFileLoader
 				float value = float.Parse (empty.Groups [2].Value);
 				min = Mathf.Min (min, value);
 				max = Mathf.Max (max, value);
+				
 				list.Add (new DoubleFloat (float.Parse (empty.Groups [1].Value), value));
 			}
 		}

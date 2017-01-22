@@ -48,17 +48,24 @@ public class LRC : MonoBehaviour
 
 	private void Start ()
 	{
+		
+
+	}
+
+	public void Init ()
+	{
 		mp3 = gameObject.GetComponentInChildren<AudioSource> () as AudioSource;
 		path = Application.streamingAssetsPath + "/Trc/" + mp3.clip.name + ".lrc"; //获取歌词路径，并同步歌词和歌曲名称
 		ReadFile ();
 		clips = AudioExportFileLoader.LoadAudioExportFile (mp3.clip.name, out minPitch, out maxPitch);
-		GameManager.Instance.pitchManager.min = minPitch;
+
+		GameManager.Instance.pitchManager.min = 10;
 		GameManager.Instance.pitchManager.max = maxPitch;
 		for (int i = 0; i < clips.Count; i++) {
 			DoubleFloat data = clips [i];
 			GameManager.Instance.pitchManager.SetPitchStepData (data.pitch, data.time);
 		}
-//		GameManager.Instance.pitchManager.SetPitchStepData()
+		//		GameManager.Instance.pitchManager.SetPitchStepData()
 		if (lyrics.Count > 2) {
 			next = lyrics [0];
 			next1 = lyrics [1];
@@ -72,17 +79,18 @@ public class LRC : MonoBehaviour
 			next1 = lyrics [1];
 			lyrics.Remove (next);
 			lyrics.Remove (next1);
-		} else if (lyrics.Count == 0) {
+		} else if (lyrics.Count == 1) {
 			next = lyrics [0];
 			lyrics.Remove (next);
 		}
-
 	}
 
 	//打开歌词文件
 	public void ReadFile ()
 	{
 		lyrics.Clear ();
+		if (!File.Exists (path))
+			return;
 		FileInfo sr = new FileInfo (path);
 		var reader = sr.OpenText ();
 		string str;
@@ -130,8 +138,8 @@ public class LRC : MonoBehaviour
 			int index = clips.FindIndex (x => Mathf.Abs (x.time - music) < 0.01);
 			if (index >= 0 && musicEvent != null) {
 				musicEvent.Invoke (clips [index].pitch);
-				for (int i = 0; i < index; i++)
-					clips.RemoveAt (i);
+//				for (int i = 0; i < index; i++)
+//					clips.RemoveAt (i);
 			}
 
 		}
