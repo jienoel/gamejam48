@@ -154,7 +154,29 @@ public class PitchManager : MonoBehaviour
 		Rect rect = step.rect.rect;
 		rect.width = MathUtility.PitchStepWidth (speed, data.time);
 		step.rect.sizeDelta = new Vector2 (rect.width, rect.height);
+		int apcount = (int)(rect.width / 37);
+		if (apcount > 0) {
+			int deltX = (int)rect.width / apcount;
+			for (int i = 0; i < apcount; i++) {
+				SetPlaceApple (y + 60, pos.x + i * deltX, DamageType.Heal, AppleSize.Small);
+//				Debugger.LogError ("1");
+			}
+		}
+
 		step.speed = speed + deltaSpeed;
 		step.moving = true;
+	}
+
+	void SetPlaceApple (float y, float x, DamageType damageType, AppleSize appleSize)
+	{
+		Apple apple = GameManager.Instance.gameCache.GetApple (appleSize);
+		Vector3 pos = apple.rect.localPosition;
+		pos.x = x;
+		pos.y = y;
+		apple.rect.localPosition = pos;
+		apple.speed = GameModel.Instance.PitchManager.speed + GameModel.Instance.PitchManager.deltaSpeed;
+		apple.moving = true;
+		apple.gameObject.SetActive (true);
+
 	}
 }

@@ -31,7 +31,7 @@ public class Apple : MonoBehaviour
 	}
 
 
-	void Update ()
+	void FixedUpdate ()
 	{
 		if (moving) {
 			pos = rect.localPosition;

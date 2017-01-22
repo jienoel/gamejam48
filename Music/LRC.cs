@@ -56,12 +56,15 @@ public class LRC : MonoBehaviour
 		musicEvent.AddListener (GameManager.Instance.OnMusicEvent);
 		mp3 = gameObject.GetComponentInChildren<AudioSource> () as AudioSource;
 		path = Application.streamingAssetsPath + "/Trc/" + mp3.clip.name + ".lrc"; //获取歌词路径，并同步歌词和歌曲名称
+		Debug.Log ("Init Lrc " + path);
 		ReadFile ();
 		clips = AudioExportFileLoader.LoadAudioExportFile (mp3.clip.name, out minPitch, out maxPitch);
 
 		GameModel.Instance.PitchManager.min = minPitch;
 		GameModel.Instance.PitchManager.max = maxPitch;
+
 		for (int i = 0; i < clips.Count; i++) {
+			
 			DoubleFloat data = clips [i];
 			GameModel.Instance.PitchManager.SetPitchStepData (data.pitch, data.time);
 		}

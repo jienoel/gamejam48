@@ -26,7 +26,7 @@ public class AppleGenerator : MonoBehaviour
 	public float badApple;
 
 	public Text text;
-
+	public float posi = 0.95f;
 	private bool isTrap = false;
 
 	void Start ()
@@ -71,12 +71,12 @@ public class AppleGenerator : MonoBehaviour
 //		float possibility = Mathf.Clamp (1 / (time * 2 - Mathf.FloorToInt (time * 2) + 0.01f), 0, 1);
 //		Debugger.Log (time);
 //		return (timeRandom.NextDouble () - possibility) > 0;
-		return (timeRandom.NextDouble () - 0.95f) > 0;
+		return (timeRandom.NextDouble () - posi) > 0;
 	}
 
-	void SetPlaceApple (float y, float x, DamageType damageType)
+	void SetPlaceApple (float y, float x, DamageType damageType, AppleSize appleSize)
 	{
-		Apple apple = GameManager.Instance.gameCache.GetApple ();
+		Apple apple = GameManager.Instance.gameCache.GetApple (appleSize);
 		Vector3 pos = apple.rect.localPosition;
 		pos.x = x;
 		pos.y = y;
@@ -103,16 +103,24 @@ public class AppleGenerator : MonoBehaviour
 				isBad = true;
 			}
 			retValue += delta;
+//			Debugger.LogError (retValue);
+			retValue = Mathf.Clamp (retValue, 0, 6);
 //			isTrap = false;
 			float y = MathUtility.GetScreenPositionByAudioPitch (retValue,
 					        
 				          GameModel.Instance.PitchManager.max, GameModel.Instance.PitchManager.min,
 				          GameModel.Instance.PitchManager.height, GameModel.Instance.PitchManager.addon, GameModel.Instance.PitchManager.step);
-			SetPlaceApple (y, posX, isBad ? DamageType.Damage : DamageType.Heal);
+			SetPlaceApple (y + 60, posX, isBad ? DamageType.Damage : DamageType.Heal, AppleSize.Big);
 //				if (onAppleGenerated != null) {
 //					onAppleGenerated.Invoke (retValue, isBad);
 //				}
-		}
+		} //else {
+//		float y1 = MathUtility.GetScreenPositionByAudioPitch (retValue,
+//
+//			            GameModel.Instance.PitchManager.max, GameModel.Instance.PitchManager.min,
+//			            GameModel.Instance.PitchManager.height, GameModel.Instance.PitchManager.addon, GameModel.Instance.PitchManager.step);
+//		SetPlaceApple (y1 + 60, posX, DamageType.Heal, AppleSize.Small);
+		//}
 //			text.text = retValue.ToString ();
 //			yield return new WaitForSecondsRealtime (appleMargin);
 //		}

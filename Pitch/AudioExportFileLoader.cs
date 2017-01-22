@@ -34,6 +34,7 @@ public static class AudioExportFileLoader
 		List<DoubleFloat> list = new List<DoubleFloat> ();
 
 		string path = Application.streamingAssetsPath + "/Exp/" + audioName + ".txt";
+		Debug.Log (path + "  load export file!");
 		if (!File.Exists (path))
 			return new List<DoubleFloat> ();
 		FileInfo sr = new FileInfo (path);

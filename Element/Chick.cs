@@ -51,6 +51,7 @@ public class Chick : MonoBehaviour
 
 	public void MoveTo (float y)
 	{
+		y += 36;
 		if (stay) {
 			targetY = rect.localPosition.y;
 		}
@@ -80,7 +81,7 @@ public class Chick : MonoBehaviour
 	{
 //		Debugger.Log ("Hit:" + Enter);
 		Vector3 p = rect.localPosition;
-		p.y = Mathf.Max (pitch.rect.localPosition.y, p.y);
+		p.y = Mathf.Max (pitch.rect.localPosition.y, p.y + 60);
 		rect.localPosition = p;
 		bool stay = Enter;
 
