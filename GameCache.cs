@@ -16,7 +16,7 @@ public class GameCache : MonoBehaviour
 		if (pitchcache.Count > 0) {
 			return pitchcache.Dequeue ();
 		}
-		return GameObject.Instantiate (pitchStepPrefab, pitchParent);
+		return GameObject.Instantiate (pitchStepPrefab, pitchParent, false);
 	}
 
 	public void RecyclePitchStep (PitchStep pitchStep)
@@ -30,7 +30,7 @@ public class GameCache : MonoBehaviour
 		if (applecache.Count > 0) {
 			return applecache.Dequeue ();
 		}
-		return GameObject.Instantiate (applePrefab, appleParent);
+		return GameObject.Instantiate (applePrefab, appleParent, false);
 	}
 
 	public void RecycleApple (Apple prop)

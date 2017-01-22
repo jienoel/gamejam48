@@ -32,6 +32,7 @@ public class MusicExport : MonoBehaviour
 	{
 		
 //		efficient.Remove (current);
+		Init ();
 	}
 
 	public void Init ()
@@ -111,7 +112,7 @@ public class MusicExport : MonoBehaviour
 	public void Export1 (string line)
 	{
 		
-		sw.WriteLine (line);
+//		sw.WriteLine (line);
 	}
 
 	float PackTime (int minite, int second, int milSecond)
@@ -123,7 +124,7 @@ public class MusicExport : MonoBehaviour
 	// Update is called once per frame
 	void FixedUpdate ()
 	{
-//		sw.WriteLine (String.Format ("{0}:{1}", mp3.time, AudioUtility.GetNoteFromFreq (AudioUtility.AnalyzeSound (mp3))));
+		sw.WriteLine (String.Format ("{0}:{1}", mp3.time, AudioUtility.GetNoteFromFreq (AudioUtility.AnalyzeSound (mp3))));
 		return;
 		if (current.time == 0 || current.pitch == 0)
 			return;

@@ -65,6 +65,7 @@ public class LRC : MonoBehaviour
 			DoubleFloat data = clips [i];
 			GameModel.Instance.PitchManager.SetPitchStepData (data.pitch, data.time);
 		}
+		GameModel.Instance.PitchManager.InitPlaceStep ();
 		//		GameManager.Instance.pitchManager.SetPitchStepData()
 		if (lyrics.Count > 2) {
 			next = lyrics [0];
@@ -89,8 +90,12 @@ public class LRC : MonoBehaviour
 	public void ReadFile ()
 	{
 		lyrics.Clear ();
-		if (!File.Exists (path))
+		if (!File.Exists (path)) {
+			Debugger.LogError (path);
 			return;
+		}
+			
+		
 		FileInfo sr = new FileInfo (path);
 		var reader = sr.OpenText ();
 		string str;
@@ -146,8 +151,12 @@ public class LRC : MonoBehaviour
 
 		GameManager.Instance.uiManager.SetMusicProgress (music / mp3.clip.length);
 		timesample = mp3.timeSamples;
-		if (next == null)
+		if (next == null) {
+			if (GameManager.Instance.uiManager.lyrics.text != "")
+				GameManager.Instance.uiManager.lyrics.text = "";
 			return;
+		}
+			
 
 
 //		Debugger.Log (music + "    " + diff);
@@ -166,6 +175,10 @@ public class LRC : MonoBehaviour
 				next2 = lyrics [0];
 				lyrics.Remove (next2);
 			}
+		}
+
+		if (next1 == null) {
+			GameManager.Instance.uiManager.lyrics1.text = "";
 		}
 	}
 
