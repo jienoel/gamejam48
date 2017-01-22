@@ -17,6 +17,7 @@ public class PitchManager : MonoBehaviour
 	public int step = 6;
 	public float windowSize = 700;
 	public float speed = 10;
+	public float deltaSpeed = 4;
 	public float tolerant = 0.5f;
 	public float height = 1044f;
 	public float duration = 0.5f;
@@ -69,6 +70,14 @@ public class PitchManager : MonoBehaviour
 		}
 	}
 
+	public void InitPlaceStep ()
+	{
+		for (int i = 0; i < showTime.Count; i++) {
+			PlacePitch (showTime [i], lists [i]);
+		}
+	}
+
+
 	public void SetPitchStepData (float value, float time)
 	{
 
@@ -77,9 +86,25 @@ public class PitchManager : MonoBehaviour
 			if (start == -1 && time > end) {
 				start = time;
 				end = time + duration;
-				showTime.Add (MathUtility.PitchShowTime (windowSize, speed, time));
-				lists.Add (new DoubleFloat (end - start, currIndex));
-				PlacePitch (start, new DoubleFloat (end - start, currIndex));
+				currIndex = index;
+				int lastIndex = -1;
+				if (lists.Count > 0) {
+					lastIndex = lists.Count - 1;
+					DoubleFloat d = lists [lastIndex];
+					if (d.pitch == currIndex) {
+						d.time += (end - start);
+						lists [lastIndex] = d;
+					} else {
+						showTime.Add (time);
+						lists.Add (new DoubleFloat (end - start, currIndex));
+					}
+
+				} else {
+					showTime.Add (time);
+					lists.Add (new DoubleFloat (end - start, currIndex));
+				}
+//				PlacePitch (start, new DoubleFloat (end - start, currIndex));
+
 				start = -1;
 			} 
 			currIndex = index;
@@ -113,18 +138,20 @@ public class PitchManager : MonoBehaviour
 
 	void PlacePitch (float time, DoubleFloat data)
 	{
-		if (MusicExport.Instance != null)
-			MusicExport.Instance.Export1 (string.Format (formater, time, data.time, data.pitch));
+		
 		PitchStep step = GameManager.Instance.gameCache.GetPitchStep ();
 		float y = MathUtility.GetScreenPositionByAudioPitch (data.pitch, GameModel.Instance.PitchManager.max, GameModel.Instance.PitchManager.min, GameModel.Instance.PitchManager.height,
 			          GameModel.Instance.PitchManager.addon, GameModel.Instance.PitchManager.step);
 		Vector3 pos = step.rect.localPosition;
 		pos.y = y;
+		if (y < 0)
+			Debugger.LogError ("UI Error " + y);
 		pos.x = 50 + time * speed;
 		step.rect.localPosition = pos;
 		Rect rect = step.rect.rect;
 		rect.width = MathUtility.PitchStepWidth (speed, data.time);
 		step.rect.sizeDelta = new Vector2 (rect.width, rect.height);
-
+		step.speed = speed + deltaSpeed;
+		step.moving = true;
 	}
 }

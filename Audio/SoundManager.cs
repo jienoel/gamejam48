@@ -12,6 +12,7 @@ public class SoundEvent : UnityEvent<float>
 
 public class SoundManager : MonoBehaviour
 {
+	public AppleGenerator appleGenerator;
 	public AudioSource recordAudioSource;
 	public SoundEvent recordEvent;
 	public AudioSource musicAudioSource;
@@ -33,7 +34,9 @@ public class SoundManager : MonoBehaviour
 
 	public void Init ()
 	{
+		appleGenerator.Init ();
 		lyric.Init ();
+
 	}
 
 	void Update ()
