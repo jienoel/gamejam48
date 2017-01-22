@@ -7,9 +7,9 @@ using UnityEngine.UI;
 
 public enum Difficulty
 {
-	EASY = 2,
-	NORMAL = 4,
-	HARD = 6}
+	EASY = 5,
+	NORMAL = 10,
+	HARD = 15}
 ;
 
 public class AppleGenerator : MonoBehaviour
@@ -66,9 +66,12 @@ public class AppleGenerator : MonoBehaviour
 	//		}
 	//	}
 
-	bool IsTrap ()
+	bool IsTrap (float time)
 	{
-		return (timeRandom.NextDouble () - 0.91f) > 0;
+//		float possibility = Mathf.Clamp (1 / (time * 2 - Mathf.FloorToInt (time * 2) + 0.01f), 0, 1);
+//		Debugger.Log (time);
+//		return (timeRandom.NextDouble () - possibility) > 0;
+		return (timeRandom.NextDouble () - 0.95f) > 0;
 	}
 
 	void SetPlaceApple (float y, float x, DamageType damageType)
@@ -84,7 +87,7 @@ public class AppleGenerator : MonoBehaviour
 
 	}
 
-	public void PlaceApple (int value, float posX)
+	public void PlaceApple (int value, float posX, float time)
 	{
 		int retValue = 0;
 		bool isBad = false;
@@ -92,7 +95,7 @@ public class AppleGenerator : MonoBehaviour
 		isBad = false;
 		retValue = value;
 //		Debugger.Log (retValue);
-		if (IsTrap ()) {
+		if (IsTrap (time)) {
 //			Debugger.LogError ("Apple");
 			var delta = (int)((heightRandom.NextDouble () - 0.5) * (int)difficulty);
 			if (appleRandom.NextDouble () < badApple) {

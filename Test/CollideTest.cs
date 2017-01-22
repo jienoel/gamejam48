@@ -9,7 +9,22 @@ public class CollideTest : MonoBehaviour
 	void OnTriggerEnter2D (Collider2D other)
 	{
 		Apple apple = other.GetComponentInParent<Apple> ();
-		chick.OnHitApple (apple);
-		GameManager.Instance.gameCache.RecycleApple (apple);
+		if (apple != null) {
+			chick.OnHitApple (apple);
+			GameManager.Instance.gameCache.RecycleApple (apple);
+		}
+
+		PitchStep pitch = other.GetComponentInParent<PitchStep> ();
+		if (pitch != null) {
+			chick.OnHitPitch (pitch, true);
+		}
+	}
+
+	void OnTriggerExit2D (Collider2D other)
+	{
+		PitchStep pitch = other.GetComponentInParent<PitchStep> ();
+		if (pitch != null) {
+			chick.OnHitPitch (pitch, false);
+		}
 	}
 }

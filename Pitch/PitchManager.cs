@@ -84,7 +84,7 @@ public class PitchManager : MonoBehaviour
 	{
 		
 		int index = MathUtility.GetStepIndexByPitch (value, max, min, addon, step);
-		GameModel.Instance.SoundManager.appleGenerator.PlaceApple (index, 50 + time * speed);
+		GameModel.Instance.SoundManager.appleGenerator.PlaceApple (index, 50 + time * speed, time);
 		if (currIndex != index) {
 			if (start == -1 && time > end) {
 				start = time;

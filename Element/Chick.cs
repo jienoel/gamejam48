@@ -14,31 +14,33 @@ public class Chick : MonoBehaviour
 	public float tolerance = 1f;
 	public float deltaTime = 0.5f;
 
-    public int hurtSpeed;
-    private bool once = false;
+	public int hurtSpeed;
+	private bool once = false;
 	// Use this for initialization
-	void Start () {
-	    GameManager.Instance.uiManager.chick = this;
+	void Start ()
+	{
+		GameManager.Instance.uiManager.chick = this;
 		if (rect == null)
 			rect = GetComponent<RectTransform> ();
 	}
 	
 	// Update is called once per frame
-	void Update () {
-	    if (!once) {
-            GameModel.Instance.SoundManager.onWin += onWin;
-	        once = true;
-	    }
+	void Update ()
+	{
+		if (!once) {
+			GameModel.Instance.SoundManager.onWin += onWin;
+			once = true;
+		}
 
-        hp -= (hurtSpeed*Time.deltaTime);
-        float ratio = ((float)hp) / maxHp;
-        GameManager.Instance.uiManager.SetChickHp(ratio);
-        if (hp <= 0) {
-            GameManager.Instance.ExitState();
-        }
+		hp -= (hurtSpeed * Time.deltaTime);
+		float ratio = ((float)hp) / maxHp;
+		GameManager.Instance.uiManager.SetChickHp (ratio);
+		if (hp <= 0) {
+			GameManager.Instance.ExitState ();
+		}
 
 
-        if (moving) {
+		if (moving) {
 			Move ();
 		}
 
@@ -49,6 +51,9 @@ public class Chick : MonoBehaviour
 
 	public void MoveTo (float y)
 	{
+		if (stay) {
+			targetY = rect.localPosition.y;
+		}
 		if (targetY != y)
 			targetY = y;
 		if (!moving) {
@@ -59,7 +64,6 @@ public class Chick : MonoBehaviour
 	void Move ()
 	{
 		Vector3 position = rect.localPosition;
-
 		float y = Mathf.Lerp (position.y, targetY, deltaTime);
 		if (position.y != y) {
 			position.y = y;
@@ -67,6 +71,19 @@ public class Chick : MonoBehaviour
 		} else {
 			moving = false;
 		}
+
+	}
+
+	bool stay;
+
+	public void OnHitPitch (PitchStep pitch, bool Enter)
+	{
+//		Debugger.Log ("Hit:" + Enter);
+		Vector3 p = rect.localPosition;
+		p.y = Mathf.Max (pitch.rect.localPosition.y, p.y);
+		rect.localPosition = p;
+		bool stay = Enter;
+
 	}
 
 	public void OnHitApple (Apple prop)
@@ -81,13 +98,14 @@ public class Chick : MonoBehaviour
 			float ratio = ((float)hp) / maxHp;
 			GameManager.Instance.uiManager.SetChickHp (ratio);
 		}
-	    if (hp == 0) {
-	        GameManager.Instance.ExitState();
-	    }
+		if (hp == 0) {
+			GameManager.Instance.ExitState ();
+		}
 	}
 
-    void onWin() {
-        GameModel.Instance.score = (int)hp;
-        GameModel.Instance.SoundManager.onWin -= onWin;
-    }
+	void onWin ()
+	{
+		GameModel.Instance.score = (int)hp;
+		GameModel.Instance.SoundManager.onWin -= onWin;
+	}
 }
