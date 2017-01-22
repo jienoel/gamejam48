@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Assets.Scripts;
 
 public class UIManager : MonoBehaviour
 {
@@ -41,7 +42,12 @@ public class UIManager : MonoBehaviour
 	public void MoveChick (float value)
 	{
 		if (chick != null) {
-			chick.MoveTo (value);
+			float y = MathUtility.GetScreenPositionByAudioPitch (
+				          MathUtility.GetStepIndexByPitch (value, GameModel.Instance.PitchManager.max, GameModel.Instance.PitchManager.min,
+					          GameModel.Instance.PitchManager.addon, GameModel.Instance.PitchManager.step),
+				          GameModel.Instance.PitchManager.max, GameModel.Instance.PitchManager.min,
+				          GameModel.Instance.PitchManager.height, GameModel.Instance.PitchManager.addon, GameModel.Instance.PitchManager.step);
+			chick.MoveTo (y);
 		}
 	}
 
