@@ -59,7 +59,7 @@ public class GameManager : MonoBehaviour
 
 	public void OnRecordEvent (float value)
 	{
-		uiManager.MoveChick (value * 10);
+		uiManager.MoveChick (value);
 	}
 
 	public void OnMusicEvent (float value)
