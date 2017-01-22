@@ -68,7 +68,7 @@ public class AppleGenerator : MonoBehaviour
 
 	bool IsTrap ()
 	{
-		return (timeRandom.NextDouble () - 0.8f) > 0;
+		return (timeRandom.NextDouble () - 0.91f) > 0;
 	}
 
 	void SetPlaceApple (float y, float x, DamageType damageType)

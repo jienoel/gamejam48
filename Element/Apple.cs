@@ -8,10 +8,17 @@ public enum DamageType
 	Damage
 }
 
+public enum AppleSize
+{
+	Big,
+	Small
+}
+
 public class Apple : MonoBehaviour
 {
 	public int hp;
 	public DamageType damageType = DamageType.Heal;
+	public AppleSize appleSize = AppleSize.Big;
 	public RectTransform rect;
 	public bool moving;
 	public float speed;
