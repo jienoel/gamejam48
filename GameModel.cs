@@ -18,8 +18,12 @@ namespace Assets.Scripts {
         [Header("Static")]
         public GameObject SoundGameObject;
 
+        public int score = 0;
+
         [Header("Dynamic")]
         public PitchManager PitchManager;
         public SoundManager SoundManager;
+        public Chick chick;
+        public Player player;
     }
 }

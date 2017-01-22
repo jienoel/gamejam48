@@ -12,11 +12,11 @@ public class Run : MonoBehaviour
 	public Text lyrics1;
 	public Transform appleParent;
 	public Transform pitchParent;
+    public Button pause;
 
 	// Use this for initialization
 	void Start ()
 	{
-		
 	}
 
 	public void Init ()
@@ -28,10 +28,11 @@ public class Run : MonoBehaviour
 		GameManager.Instance.uiManager.lyrics1 = lyrics1;
 		GameManager.Instance.gameCache.appleParent = appleParent;
 		GameManager.Instance.gameCache.pitchParent = pitchParent;
-	}
-	
-	// Update is called once per frame
-	void Update ()
+        pause.onClick.AddListener(() => GameManager.Instance.ExitState(EGameState.WELCOME));
+    }
+
+    // Update is called once per frame
+    void Update ()
 	{
 		
 	}
